@@ -25,6 +25,11 @@ import javax.annotation.concurrent.NotThreadSafe;
  */
 @NotThreadSafe
 public class UUIDGenerator {
+  // four bytes selected for their relatively high Hamming distances
+  private static final byte A = 0x06;
+  private static final byte B = 0x7F;
+  private static final byte C = (byte) 0xB8;
+  private static final byte D = (byte) 0xC1;
 
   private long v0, v1, v2, v3;
 
@@ -61,10 +66,10 @@ public class UUIDGenerator {
    */
   @CheckReturnValue
   public UUID generate() {
-    final long k0 = sipHash24(v0, v1, v2, v3, (byte) 1);
-    final long k1 = sipHash24(v0, v1, v2, v3, (byte) 2);
-    final long msb = (sipHash24(v0, v1, v2, v3, (byte) 3) & ~0xF000L) | 0x4000L;
-    final long lsb = ((sipHash24(v0, v1, v2, v3, (byte) 4) << 2) >>> 2) | 0x8000000000000000L;
+    final long k0 = sipHash24(v0, v1, v2, v3, A);
+    final long k1 = sipHash24(v0, v1, v2, v3, B);
+    final long msb = (sipHash24(v0, v1, v2, v3, C) & ~0xF000L) | 0x4000L;
+    final long lsb = ((sipHash24(v0, v1, v2, v3, D) << 2) >>> 2) | 0x8000000000000000L;
     reset(k0, k1);
     return new UUID(msb, lsb);
   }

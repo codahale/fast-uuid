@@ -26,8 +26,8 @@ class UUIDGeneratorTest {
   @Test
   void generatingUUIDs() {
     final UUIDGenerator generator = new UUIDGenerator(1, 2);
-    assertThat(generator.generate().toString()).isEqualTo("da96ccf7-6644-4e2c-8217-4f943f318ee3");
-    assertThat(generator.generate().toString()).isEqualTo("20a46683-c7e7-4d29-8733-6ee650f5ba2c");
+    assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
+    assertThat(generator.generate().toString()).isEqualTo("4aeaf425-8bdd-4eaa-bea9-86dc1e8ca6a6");
     assertThat(generator.generate().version()).isEqualTo(4);
     assertThat(generator.generate().variant()).isEqualTo(2);
   }
@@ -36,7 +36,7 @@ class UUIDGeneratorTest {
   void randomSeeding() {
     final Random random = new Random(100);
     final UUIDGenerator generator = new UUIDGenerator(random);
-    assertThat(generator.generate().toString()).isEqualTo("91305a0b-1dd1-480c-8edc-e02c5ac6a728");
-    assertThat(generator.generate().toString()).isEqualTo("ede04e9f-139d-43ce-bf17-fa760d1a0cfa");
+    assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
+    assertThat(generator.generate().toString()).isEqualTo("07b145c8-a28b-4067-9891-9843ed61e7a2");
   }
 }

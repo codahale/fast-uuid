@@ -18,8 +18,9 @@ Instead of `SecureRandom`, `UUIDGenerator` uses
 [SipHash-2-4](https://131002.net/siphash/siphash.pdf) in a
 [fast-key-erasure](https://blog.cr.yp.to/20170723-random.html) CSPRNG. 
 
-For each UUID, it uses SipHash-2-4 to hash the single-byte values `1` through `4`. The first two
-results are used to re-key the hash; the second two are used to produce the UUID. 
+For each UUID, it uses SipHash-2-4 to hash four single-byte values selected for their high Hamming
+distances from each other. The first two results are used to re-key the hash; the second two are
+used to produce the UUID.
 
 For UUIDs, a few key properties are desirable:
 
@@ -38,15 +39,15 @@ For the first property, SipHash is a cryptographically strong PRF, which should 
 indistinguishable from a uniform random function. The UUIDs generated from its output, therefore,
 should also be uniformly distributed.
 
-For the second property, consider the information an attacker might collect: `{h(k, 3), h(k, 4)}`.
+For the second property, consider the information an attacker might collect: `{h(k, C), h(k, D)}`.
 In order to calculate future values, an attacker would need to learn information about `k`. SipHash
 is a strong MAC, however, which means key recovery attacks should be as difficult as brute force.
 Without the ability to recover `k`, the attacker would find it doubly difficult to calculate past
-values (e.g. `h(k0, 3)` given `h(h(k0, 1) . h(k0, 2), 3)`).
+values (e.g. `h(k0, C)` given `h(h(k0, A) . h(k0, B), C)`).
 
-For the third property, consider the information an attacker might collect: `h(h(k, 1) . h(k, 2),
-1)`. Again, because SipHash is a strong MAC, an attacker should be unable to recover information
-about `k` and therefore unable to calculate past values (e.g. `h(k, 3)`). Of course, they *will* be
+For the third property, consider the information an attacker might collect: `h(h(k, A) . h(k, B),
+A)`. Again, because SipHash is a strong MAC, an attacker should be unable to recover information
+about `k` and therefore unable to calculate past values (e.g. `h(k, C)`). Of course, they *will* be
 able to calculate future values, so don't let attackers look at your memory.
 
 ## Fascinating
