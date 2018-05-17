@@ -31,6 +31,7 @@ public class UUIDGenerator {
   private static final byte C = (byte) 0xB8;
   private static final byte D = (byte) 0xC1;
 
+  // SipHash state
   private long v0, v1, v2, v3;
 
   /**
@@ -53,6 +54,7 @@ public class UUIDGenerator {
   }
 
   private void reset(long k0, long k1) {
+    // SipHash magic constants
     this.v0 = k0 ^ 0x736F6D6570736575L;
     this.v1 = k1 ^ 0x646F72616E646F6DL;
     this.v2 = k0 ^ 0x6C7967656E657261L;
@@ -77,10 +79,10 @@ public class UUIDGenerator {
   // a very slimmed-down version of SipHash-2-4 which operates on a single byte
   @SuppressWarnings("Duplicates")
   private static long sipHash24(long v0, long v1, long v2, long v3, byte data) {
-    final long m = data | 0x100000000000000L;
+    final long m = data | 0x100000000000000L; // simplify the masking
 
     v3 ^= m;
-    for (int r = 0; r < 2; r++) {
+    for (int i = 0; i < 2; i++) { // put the 2 in SipHash-2-4
       v0 += v1;
       v2 += v3;
       v1 = Long.rotateLeft(v1, 13);
@@ -102,7 +104,7 @@ public class UUIDGenerator {
     v0 ^= m;
 
     v2 ^= 0xFF;
-    for (int r = 0; r < 4; r++) {
+    for (int i = 0; i < 4; i++) { // put the 4 in SipHash-2-4
       v0 += v1;
       v2 += v3;
       v1 = Long.rotateLeft(v1, 13);
