@@ -28,7 +28,7 @@
   <name>fast-uuid</name>
   <url>https://github.com/codahale/fast-uuid</url>
   <description>
-    A high-performance UUIDv5 generator.
+    A high-performance UUIDv4 generator.
   </description>
   <licenses>
     <license>
