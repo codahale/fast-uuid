@@ -43,7 +43,7 @@ For the second property, consider the information an attacker might collect: `{h
 In order to calculate future values, an attacker would need to learn information about `k`. SipHash
 is a strong MAC, however, which means key recovery attacks should be as difficult as brute force.
 Without the ability to recover `k`, the attacker would find it doubly difficult to calculate past
-values (e.g. `h(k0, C)` given `h(h(k0, A) . h(k0, B), C)`).
+values (e.g. `h(k, C)` given `h(h(k, A) . h(k, B), C)`).
 
 For the third property, consider the information an attacker might collect: `h(h(k, A) . h(k, B),
 A)`. Again, because SipHash is a strong MAC, an attacker should be unable to recover information
