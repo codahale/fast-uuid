@@ -15,6 +15,9 @@
  */
 package com.codahale.fastuuid;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.LongBuffer;
 import java.util.Random;
 import java.util.UUID;
 import javax.annotation.CheckReturnValue;
@@ -51,6 +54,17 @@ public class UUIDGenerator {
    */
   public UUIDGenerator(long k0, long k1) {
     reset(k0, k1);
+  }
+
+  /**
+   * Creates a new {@link UUIDGenerator} with the given 128-bit seed value.
+   *
+   * @param key two big-endian 64-bit integers
+   * @see UUIDGenerator#UUIDGenerator(long, long)
+   */
+  public UUIDGenerator(byte[] key) {
+    final LongBuffer buf = ByteBuffer.wrap(key).order(ByteOrder.BIG_ENDIAN).asLongBuffer();
+    reset(buf.get(), buf.get());
   }
 
   private void reset(long k0, long k1) {
