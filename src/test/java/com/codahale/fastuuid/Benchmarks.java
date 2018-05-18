@@ -24,7 +24,6 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.infra.Blackhole;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -33,12 +32,12 @@ public class Benchmarks {
   private final UUIDGenerator generator = new UUIDGenerator(new SecureRandom());
 
   @Benchmark
-  public void fast(Blackhole bh) {
-    bh.consume(generator.generate());
+  public UUID fast() {
+    return generator.generate();
   }
 
   @Benchmark
-  public void stdLib(Blackhole bh) {
-    bh.consume(UUID.randomUUID());
+  public UUID stdLib() {
+    return UUID.randomUUID();
   }
 }
