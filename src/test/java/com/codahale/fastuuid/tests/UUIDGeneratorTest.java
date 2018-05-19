@@ -16,6 +16,7 @@
 package com.codahale.fastuuid.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.codahale.fastuuid.UUIDGenerator;
 import java.util.Random;
@@ -54,5 +55,8 @@ class UUIDGeneratorTest {
 
     generator.reseed(seed);
     assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
+
+    assertThatThrownBy(() -> generator.reseed(new byte[15]))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 }

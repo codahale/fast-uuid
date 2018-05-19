@@ -96,6 +96,9 @@ public class UUIDGenerator {
    * @param key two big-endian 64-bit integers
    */
   public void reseed(byte[] key) {
+    if (key.length != 16) {
+      throw new IllegalArgumentException("seed must be exactly 16 bytes");
+    }
     final LongBuffer buf = ByteBuffer.wrap(key).order(ByteOrder.BIG_ENDIAN).asLongBuffer();
     reseed(buf.get(), buf.get());
   }
