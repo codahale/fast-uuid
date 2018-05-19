@@ -25,6 +25,17 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 /**
  * A class which generates {@link UUID} instances using SipHash-2-4 in a fast-key-erasure CSPRNG.
+ *
+ * <p>For each UUID, it uses SipHash-2-4 to hash four single-byte values selected for their high
+ * Hamming distances from each other. The first two results are used to re-key the hash; the second
+ * two are used to produce the UUID.
+ *
+ * <p>This design allows for very fast UUID generation (~50ns/UUID) as well as forward-secrecy (i.e.
+ * a compromised generator reveals no information about previously-generated UUIDs).
+ *
+ * <p>To provide backward-secrecy (i.e. a compromised generator reveals no information about UUIDs
+ * which will be generated), the generator should be periodically re-seeded from a {@link
+ * java.security.SecureRandom} instance.
  */
 @NotThreadSafe
 public class UUIDGenerator {
