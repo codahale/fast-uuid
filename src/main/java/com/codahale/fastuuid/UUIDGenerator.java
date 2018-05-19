@@ -38,41 +38,64 @@ public class UUIDGenerator {
   private long v0, v1, v2, v3;
 
   /**
-   * Creates a new {@link UUIDGenerator} seeded from the given PRNG.
-   *
-   * @param random a PRNG to use for a seed
-   */
-  public UUIDGenerator(Random random) {
-    this(random.nextLong(), random.nextLong());
-  }
-
-  /**
    * Creates a new {@link UUIDGenerator} with the given seed values.
    *
    * @param k0 the first seed value
    * @param k1 the second seed value
    */
   public UUIDGenerator(long k0, long k1) {
-    reset(k0, k1);
+    reseed(k0, k1);
   }
 
   /**
    * Creates a new {@link UUIDGenerator} with the given 128-bit seed value.
    *
    * @param key two big-endian 64-bit integers
-   * @see UUIDGenerator#UUIDGenerator(long, long)
    */
   public UUIDGenerator(byte[] key) {
-    final LongBuffer buf = ByteBuffer.wrap(key).order(ByteOrder.BIG_ENDIAN).asLongBuffer();
-    reset(buf.get(), buf.get());
+    reseed(key);
   }
 
-  private void reset(long k0, long k1) {
+  /**
+   * Creates a new {@link UUIDGenerator} seeded from the given PRNG.
+   *
+   * @param random a PRNG to use for a seed
+   */
+  public UUIDGenerator(Random random) {
+    reseed(random);
+  }
+
+  /**
+   * Re-seeds the {@link UUIDGenerator} with the given seed values.
+   *
+   * @param k0 the first seed value
+   * @param k1 the second seed value
+   */
+  public void reseed(long k0, long k1) {
     // SipHash magic constants
     this.v0 = k0 ^ 0x736F6D6570736575L;
     this.v1 = k1 ^ 0x646F72616E646F6DL;
     this.v2 = k0 ^ 0x6C7967656E657261L;
     this.v3 = k1 ^ 0x7465646279746573L;
+  }
+
+  /**
+   * Re-seeds the {@link UUIDGenerator} with the given 128-bit seed value.
+   *
+   * @param key two big-endian 64-bit integers
+   */
+  public void reseed(byte[] key) {
+    final LongBuffer buf = ByteBuffer.wrap(key).order(ByteOrder.BIG_ENDIAN).asLongBuffer();
+    reseed(buf.get(), buf.get());
+  }
+
+  /**
+   * Re-seeds the {@link UUIDGenerator} with the given PRNG.
+   *
+   * @param random a PRNG to use for a seed
+   */
+  public void reseed(Random random) {
+    reseed(random.nextLong(), random.nextLong());
   }
 
   /**
@@ -86,7 +109,7 @@ public class UUIDGenerator {
     final long k1 = sipHash24(v0, v1, v2, v3, B);
     final long msb = (sipHash24(v0, v1, v2, v3, C) & ~0xF000L) | 0x4000L;
     final long lsb = ((sipHash24(v0, v1, v2, v3, D) << 2) >>> 2) | 0x8000000000000000L;
-    reset(k0, k1);
+    reseed(k0, k1);
     return new UUID(msb, lsb);
   }
 
