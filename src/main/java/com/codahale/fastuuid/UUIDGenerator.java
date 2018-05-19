@@ -29,10 +29,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 @NotThreadSafe
 public class UUIDGenerator {
   // four bytes selected for their relatively high Hamming distances
-  private static final byte A = 0x06;
-  private static final byte B = 0x7F;
-  private static final byte C = (byte) 0xB8;
-  private static final byte D = (byte) 0xC1;
+  private static final byte A = 0b00000110;
+  private static final byte B = 0b01111111;
+  private static final byte C = (byte) 0b10111000;
+  private static final byte D = (byte) 0b11000001;
 
   // SipHash state
   private long v0, v1, v2, v3;
