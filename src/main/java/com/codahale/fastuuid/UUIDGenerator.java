@@ -15,9 +15,6 @@
  */
 package com.codahale.fastuuid;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.LongBuffer;
 import java.security.SecureRandom;
 import java.util.UUID;
 import javax.annotation.CheckReturnValue;
@@ -34,8 +31,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  * a compromised generator reveals no information about previously-generated UUIDs).
  *
  * <p>To provide backward-secrecy (i.e. a compromised generator reveals no information about UUIDs
- * which will be generated), the generator should be periodically re-seeded from a {@link
- * java.security.SecureRandom} instance.
+ * which will be generated), the generator should be periodically re-seeded.
  */
 @NotThreadSafe
 public class UUIDGenerator {
@@ -45,27 +41,11 @@ public class UUIDGenerator {
   private static final byte C = (byte) 0b10111000;
   private static final byte D = (byte) 0b11000001;
 
+  // underlying PRNG
+  private final SecureRandom random;
+
   // SipHash state
   private long v0, v1, v2, v3;
-
-  /**
-   * Creates a new {@link UUIDGenerator} with the given seed values.
-   *
-   * @param k0 the first seed value
-   * @param k1 the second seed value
-   */
-  public UUIDGenerator(long k0, long k1) {
-    reseed(k0, k1);
-  }
-
-  /**
-   * Creates a new {@link UUIDGenerator} with the given 128-bit seed value.
-   *
-   * @param key two big-endian 64-bit integers
-   */
-  public UUIDGenerator(byte[] key) {
-    reseed(key);
-  }
 
   /**
    * Creates a new {@link UUIDGenerator} seeded from the given PRNG.
@@ -73,43 +53,21 @@ public class UUIDGenerator {
    * @param random a PRNG to use for a seed
    */
   public UUIDGenerator(SecureRandom random) {
-    reseed(random);
+    this.random = random;
+    reseed();
   }
 
-  /**
-   * Re-seeds the {@link UUIDGenerator} with the given seed values.
-   *
-   * @param k0 the first seed value
-   * @param k1 the second seed value
-   */
-  public void reseed(long k0, long k1) {
+  /** Re-seeds the {@link UUIDGenerator}. */
+  public void reseed() {
+    reseed(random.nextLong(), random.nextLong());
+  }
+
+  private void reseed(long k0, long k1) {
     // SipHash magic constants
     this.v0 = k0 ^ 0x736F6D6570736575L;
     this.v1 = k1 ^ 0x646F72616E646F6DL;
     this.v2 = k0 ^ 0x6C7967656E657261L;
     this.v3 = k1 ^ 0x7465646279746573L;
-  }
-
-  /**
-   * Re-seeds the {@link UUIDGenerator} with the given 128-bit seed value.
-   *
-   * @param key two big-endian 64-bit integers
-   */
-  public void reseed(byte[] key) {
-    if (key.length != 16) {
-      throw new IllegalArgumentException("seed must be exactly 16 bytes");
-    }
-    final LongBuffer buf = ByteBuffer.wrap(key).order(ByteOrder.BIG_ENDIAN).asLongBuffer();
-    reseed(buf.get(), buf.get());
-  }
-
-  /**
-   * Re-seeds the {@link UUIDGenerator} with the given PRNG.
-   *
-   * @param random a PRNG to use for a seed
-   */
-  public void reseed(SecureRandom random) {
-    reseed(random.nextLong(), random.nextLong());
   }
 
   /**

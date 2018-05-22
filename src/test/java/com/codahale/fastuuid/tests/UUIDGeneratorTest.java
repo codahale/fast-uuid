@@ -16,7 +16,6 @@
 package com.codahale.fastuuid.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,45 +24,19 @@ import java.security.SecureRandom;
 import org.junit.jupiter.api.Test;
 
 class UUIDGeneratorTest {
-
   @Test
-  void generatingUUIDs() {
-    final UUIDGenerator generator = new UUIDGenerator(1, 2);
-    assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
-    assertThat(generator.generate().toString()).isEqualTo("4aeaf425-8bdd-4eaa-bea9-86dc1e8ca6a6");
-    assertThat(generator.generate().version()).isEqualTo(4);
-    assertThat(generator.generate().variant()).isEqualTo(2);
-
-    generator.reseed(1, 2);
-    assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
-  }
-
-  @Test
-  void randomSeeding() {
+  void generating() {
     final SecureRandom random = mock(SecureRandom.class);
-    when(random.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
+    when(random.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L,
+        0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
 
     final UUIDGenerator generator = new UUIDGenerator(random);
     assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
     assertThat(generator.generate().toString()).isEqualTo("07b145c8-a28b-4067-9891-9843ed61e7a2");
+    assertThat(generator.generate().version()).isEqualTo(4);
+    assertThat(generator.generate().variant()).isEqualTo(2);
 
-    final SecureRandom other = mock(SecureRandom.class);
-    when(other.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
-    generator.reseed(other);
+    generator.reseed();
     assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
-  }
-
-  @Test
-  void byteSeeding() {
-    final byte[] seed = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2};
-    final UUIDGenerator generator = new UUIDGenerator(seed);
-    assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
-    assertThat(generator.generate().toString()).isEqualTo("4aeaf425-8bdd-4eaa-bea9-86dc1e8ca6a6");
-
-    generator.reseed(seed);
-    assertThat(generator.generate().toString()).isEqualTo("94fd9f93-0e67-48f8-acaf-b4fe0e4dba32");
-
-    assertThatThrownBy(() -> generator.reseed(new byte[15]))
-        .isInstanceOf(IllegalArgumentException.class);
   }
 }
