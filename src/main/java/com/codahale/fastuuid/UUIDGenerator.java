@@ -18,7 +18,7 @@ package com.codahale.fastuuid;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.LongBuffer;
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.UUID;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -72,7 +72,7 @@ public class UUIDGenerator {
    *
    * @param random a PRNG to use for a seed
    */
-  public UUIDGenerator(Random random) {
+  public UUIDGenerator(SecureRandom random) {
     reseed(random);
   }
 
@@ -108,7 +108,7 @@ public class UUIDGenerator {
    *
    * @param random a PRNG to use for a seed
    */
-  public void reseed(Random random) {
+  public void reseed(SecureRandom random) {
     reseed(random.nextLong(), random.nextLong());
   }
 

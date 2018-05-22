@@ -17,9 +17,11 @@ package com.codahale.fastuuid.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.codahale.fastuuid.UUIDGenerator;
-import java.util.Random;
+import java.security.SecureRandom;
 import org.junit.jupiter.api.Test;
 
 class UUIDGeneratorTest {
@@ -38,11 +40,16 @@ class UUIDGeneratorTest {
 
   @Test
   void randomSeeding() {
-    final UUIDGenerator generator = new UUIDGenerator(new Random(100));
+    final SecureRandom random = mock(SecureRandom.class);
+    when(random.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
+
+    final UUIDGenerator generator = new UUIDGenerator(random);
     assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
     assertThat(generator.generate().toString()).isEqualTo("07b145c8-a28b-4067-9891-9843ed61e7a2");
 
-    generator.reseed(new Random(100));
+    final SecureRandom other = mock(SecureRandom.class);
+    when(other.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
+    generator.reseed(other);
     assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
   }
 
