@@ -27,8 +27,9 @@ class UUIDGeneratorTest {
   @Test
   void generating() {
     final SecureRandom random = mock(SecureRandom.class);
-    when(random.nextLong()).thenReturn(0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L,
-        0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
+    when(random.nextLong())
+        .thenReturn(
+            0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L, 0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
 
     final UUIDGenerator generator = new UUIDGenerator(random);
     assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
