@@ -88,7 +88,7 @@ public class UUIDGenerator {
   // a very slimmed-down version of SipHash-2-4 which operates on a single byte
   @SuppressWarnings("Duplicates")
   private static long sipHash24(long v0, long v1, long v2, long v3, byte data) {
-    final long m = (data & 0xFF) | 0x100000000000000L; // simplify the masking
+    final long m = (data & 0xFFL) | 0x100000000000000L; // simplify the masking
 
     v3 ^= m;
     for (int i = 0; i < 2; i++) { // put the 2 in SipHash-2-4

@@ -32,12 +32,12 @@ class UUIDGeneratorTest {
             0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L, 0xb8d59fd5bc12dbb4L, 0x31e9f344b73ee369L);
 
     final UUIDGenerator generator = new UUIDGenerator(random);
-    assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
-    assertThat(generator.generate().toString()).isEqualTo("07b145c8-a28b-4067-9891-9843ed61e7a2");
+    assertThat(generator.generate().toString()).isEqualTo("88e6891a-3dbc-423c-b51a-127083468307");
+    assertThat(generator.generate().toString()).isEqualTo("ad173908-cbe5-49a7-8a36-b516b033b4bd");
     assertThat(generator.generate().version()).isEqualTo(4);
     assertThat(generator.generate().variant()).isEqualTo(2);
 
     generator.reseed();
-    assertThat(generator.generate().toString()).isEqualTo("f46add7b-083b-48a4-bdb0-9fa3c92f2bc2");
+    assertThat(generator.generate().toString()).isEqualTo("88e6891a-3dbc-423c-b51a-127083468307");
   }
 }
