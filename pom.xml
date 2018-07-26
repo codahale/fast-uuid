@@ -24,7 +24,7 @@
   <parent>
     <groupId>com.codahale</groupId>
     <artifactId>common-pom</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
   </parent>
 
   <artifactId>fast-uuid</artifactId>
