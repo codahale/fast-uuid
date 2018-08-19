@@ -17,8 +17,6 @@ package com.codahale.fastuuid;
 
 import java.security.SecureRandom;
 import java.util.UUID;
-import javax.annotation.CheckReturnValue;
-import javax.annotation.concurrent.NotThreadSafe;
 
 /**
  * A class which generates {@link UUID} instances using SipHash-2-4 in a fast-key-erasure CSPRNG.
@@ -33,7 +31,6 @@ import javax.annotation.concurrent.NotThreadSafe;
  * <p>To provide backward-secrecy (i.e. a compromised generator reveals no information about UUIDs
  * which will be generated), the generator should be periodically re-seeded.
  */
-@NotThreadSafe
 public class UUIDGenerator {
   // four bytes selected for their relatively high Hamming distances
   private static final byte A = 0b00000110;
@@ -75,7 +72,6 @@ public class UUIDGenerator {
    *
    * @return a random {@link UUID}
    */
-  @CheckReturnValue
   public UUID generate() {
     final long k0 = sipHash24(v0, v1, v2, v3, A);
     final long k1 = sipHash24(v0, v1, v2, v3, B);
