@@ -24,7 +24,7 @@
   <parent>
     <groupId>com.codahale</groupId>
     <artifactId>common-pom</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.11</version>
   </parent>
 
   <artifactId>fast-uuid</artifactId>
@@ -43,4 +43,22 @@
     <url>https://github.com/codahale/fast-uuid</url>
     <tag>HEAD</tag>
   </scm>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Automatic-Module-Name>com.codahale.fastuuid</Automatic-Module-Name>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
