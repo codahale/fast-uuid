@@ -1,6 +1,6 @@
 # fast-uuid
 
-[![Build Status](https://secure.travis-ci.org/codahale/fast-uuid.svg)](http://travis-ci.org/codahale/fast-uuid)
+[![CircleCI](https://circleci.com/gh/codahale/fast-uuid.svg?style=svg)](https://circleci.com/gh/codahale/fast-uuid)
 
 I dunno, man. It generates v4 UUIDs really quickly.
 
