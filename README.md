@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/codahale/fast-uuid.svg?style=svg)](https://circleci.com/gh/codahale/fast-uuid)
 
+**N.B.: This is a cool design, but is only an order of magnitude faster than the Java 12 standard library. Just use that instead.**
+
 I dunno, man. It generates v4 UUIDs really quickly.
 
 ## How quickly
